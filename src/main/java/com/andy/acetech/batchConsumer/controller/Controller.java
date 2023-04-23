@@ -14,20 +14,18 @@ public class Controller {
 	
 	public static JsonArray jsonToBatchArray(String jsonString){
 		ArrayList<Batch> batchArray=new ArrayList<Batch>(); 
-		if(isValid(jsonString)) {
+		if(isValidJsonArray(jsonString)) { // validate JSON and make sure it is an array
 			JsonArray data = (JsonArray) JsonParser.parseString(jsonString);
 			for (JsonElement element : data) {
 			    JsonObject object = element.getAsJsonObject();
-			    System.out.println(object.toString());
 			    Batch tempBatch=convertJsonToBatchObject(object);
 			    if(tempBatch != null) {
 			    	batchArray.add(convertJsonToBatchObject(object));
 			    }else{
-			    	return getJsonStringBadIDResponse();// return an error that properly reflects the issue.
+			    	return getJsonStringBadIDResponse();
 			    }
-			    
 			}			
-		}else { 
+		}else{
 			return getJsonStringMalformedOrEmptyResponse();
 		}
 		// insert the batchArray successes into a database.
@@ -54,7 +52,7 @@ public class Controller {
 	private static JsonArray getJsonStringMalformedOrEmptyResponse() {
 		JsonArray errorResponse = new JsonArray();
 		JsonObject errorMessage=new JsonObject();
-		errorMessage.addProperty("ERROR", "message was empty or invalid json");
+		errorMessage.addProperty("ERROR", "message was empty or invalid json array");
 		errorResponse.add(errorMessage);
 		
 		return errorResponse;
@@ -72,7 +70,7 @@ public class Controller {
 	private static Batch convertJsonToBatchObject(JsonObject jsonBatch) {
 		Batch newBatch=new Batch();
 		
-		if(jsonBatch.has("batchid")){ 
+		if(jsonBatch.has("batchid")&&jsonBatch.get("batchid").getAsString().length()>0 ){ 
 			newBatch.setBatchId(jsonBatch.get("batchid").getAsString() );
 		}else{
 			/* The reason we return null from this instead of simply recording the issue is 
@@ -114,19 +112,20 @@ public class Controller {
 			newBatch.addErrorList("batchCount", "value not found");  
 		}
 		
-		//System.out.println("");
-		//newBatch.print();
-		//System.out.println("");
+		newBatch.setRecievedDate( LocalDate.now() );
 		
 		return newBatch;
 	}
 
-	public static boolean isValid(String json) {
+	public static boolean isValidJsonArray(String json) {
 		if(json==null) {
 			return false;
 		}
 	    try {
-	        JsonParser.parseString(json);
+	    	JsonElement data =JsonParser.parseString(json);
+	    	if(!data.isJsonArray()) {
+	    		return false;
+	    	}
 	    } catch (JsonSyntaxException e) { return false;
 	    }
 	    return true;

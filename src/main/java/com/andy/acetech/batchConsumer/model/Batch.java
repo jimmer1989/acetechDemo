@@ -1,7 +1,7 @@
 package com.andy.acetech.batchConsumer.model;
 
 import java.time.LocalDate;
-import java.util.Date;
+
 
 public class Batch extends Transmittable
 {
@@ -10,7 +10,7 @@ public class Batch extends Transmittable
 	private String batchTypeId;
 	private String batchId;
 	private int batchCount;
-	
+	private LocalDate receivedDate;
 	public Batch()
 	{
 		
@@ -65,7 +65,13 @@ public class Batch extends Transmittable
 		this.batchId = batchId;
 	}
 
-	
+	public void setRecievedDate(LocalDate now) {
+		this.receivedDate = now;
+	}
+
+	public LocalDate getRecievedDate() {
+		return receivedDate;
+	}
 	
 	
 }

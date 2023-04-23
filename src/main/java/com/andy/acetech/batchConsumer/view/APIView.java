@@ -24,17 +24,22 @@ public class APIView {
 	 
 	@PutMapping("/")
 	public ResponseEntity<String> updateBatch(@RequestBody String jsonString) {
-
-	    JsonArray responseContent = Controller.jsonToBatchArray(jsonString);
-	    System.out.println("\n\n "+responseContent.toString()+" \n\n");
+		//System.out.println("System.getProperty(\"java.version\")"+System.getProperty("java.version"));
 	    
-	    ResponseEntity<String> response = new ResponseEntity<String>(responseContent.toString(), HttpStatus.ACCEPTED);
-
+		JsonArray responseContent = Controller.jsonToBatchArray(jsonString);	    
+	    /* How often does this message come in ?
+	     * if it's every few seconds or once a minute, is it really necessary to chase fails ?
+	     * I have seen well regarded and trusted systems that simply disregard the odd message failure, with the knowledge that another update will be along soon enough
+	     * solutions like this should have a last update field when displaying info to the user.
+	     * for now I will assume every message is unmissable, and should be followed up */
+	    
+	    /* http status is always ok if we have read and respond */
+	    ResponseEntity<String> response = new ResponseEntity<String>(responseContent.toString(), HttpStatus.OK);
+	    
+	    /*
+	     * */
+	    
+	    
 	    return response;
 	}
-	/*
-		Notes to self, should we reject a batch if there is an issue with one ?
-		or is the customer system good enough to resend single items ?
-	
-	*/
 }
