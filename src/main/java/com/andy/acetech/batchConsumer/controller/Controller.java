@@ -2,7 +2,6 @@ package com.andy.acetech.batchConsumer.controller;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -28,10 +27,16 @@ public class Controller {
 		}else{
 			return getJsonStringMalformedOrEmptyResponse();
 		}
+		
+		
+		
 		// insert the batchArray successes into a database.
 		// OUT OF SCOPE FOR NOW - need to handle database issue though.
 		// what if they send a batchID we have not seen before ?
 		// what if they have a batchID / batchTypeDescription pair that is different from what we have ?
+		
+		
+		
 		JsonArray response = new JsonArray(); 
 		for(int i=0; i<batchArray.size(); i++) {
 			JsonObject entry = new JsonObject();
@@ -111,9 +116,7 @@ public class Controller {
 		}else{
 			newBatch.addErrorList("batchCount", "value not found");  
 		}
-		
 		newBatch.setRecievedDate( LocalDate.now() );
-		
 		return newBatch;
 	}
 
@@ -123,9 +126,10 @@ public class Controller {
 		}
 	    try {
 	    	JsonElement data =JsonParser.parseString(json);
-	    	if(!data.isJsonArray()) {
+	    	if(!data.isJsonArray() || data.getAsJsonArray().size()<1) {
 	    		return false;
 	    	}
+	    	
 	    } catch (JsonSyntaxException e) { return false;
 	    }
 	    return true;

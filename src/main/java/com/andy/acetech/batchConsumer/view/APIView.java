@@ -1,17 +1,13 @@
 package com.andy.acetech.batchConsumer.view;
 
-import java.util.ArrayList;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.andy.acetech.batchConsumer.controller.Controller;
-import com.andy.acetech.batchConsumer.model.Batch;
 import com.google.gson.JsonArray;
 
 @RestController
@@ -37,7 +33,11 @@ public class APIView {
 	    ResponseEntity<String> response = new ResponseEntity<String>(responseContent.toString(), HttpStatus.OK);
 	    
 	    /*
-	     * */
+	     After asking Seachliann I treat these as if the client system can read errors and resend single messages based on errors in our responses.
+	     if the client system could not read errors with this detail I would simply respond to all issue with 
+	     
+	     [{"ERROR":"One or more nodes had a missing ID, please resend batch"}]
+	      */
 	    
 	    
 	    return response;
