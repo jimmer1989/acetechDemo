@@ -57,7 +57,7 @@ public class Controller {
 		
 		
 		// insert the batchArray successes into a database.
-		// for each object that returns true from .isSuccessful
+		// for each object that returns true from .isSuccessful()
 		
 		// OUT OF SCOPE FOR NOW - need to handle database issue though.
 		// what if they send a batchID we have not seen before ?
@@ -71,11 +71,12 @@ public class Controller {
 		
 		// what if the database is simply non responsive?
 		// is it possible to send failures at a later time, asynchronously? 
+	
 		
 		// we can log and store messages once database recovers, but might have missed opportunity to send back unknown batch error.
 		// in these scenarios we can build a queue, and submit once db has recovered.
 		
-		// final thought, It is best to request resend in this case.
+		// final thought, It is best to request resend in this case, unless the there is no timeout set, then we could leave sender hanging (until we have a final answer) if that is acceptable to them
 		// accuracy is important, commonly occurring database issues should be dealt with by bug fixing or scaling up resources (based on the situation)
 		
 		return response;
