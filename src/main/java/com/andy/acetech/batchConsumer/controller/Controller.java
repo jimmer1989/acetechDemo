@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.Map.Entry;
 
 import com.google.gson.*;
-
 import com.andy.acetech.batchConsumer.model.*;
 
 public class Controller {
