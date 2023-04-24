@@ -17,7 +17,7 @@ public class Controller {
 		ArrayList<Batch> batchArray=new ArrayList<Batch>(); 
 		if(isValidJsonArray(jsonString)) { // validate JSON and make sure it is an array
 			JsonArray data = (JsonArray) JsonParser.parseString(jsonString);
-			for (JsonElement element : data) {
+			for (JsonElement element : data) { // go through list of json objects, check for issues and add them to the array.
 			    JsonObject object = element.getAsJsonObject();
 			    Batch tempBatch=convertJsonToBatchObject(object);
 			    if(tempBatch != null) {
