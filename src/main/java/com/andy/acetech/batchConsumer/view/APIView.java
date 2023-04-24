@@ -37,10 +37,10 @@ public class APIView {
 	    
 	    /*
 	     After asking Seachliann I treat these as if the client system can read errors and resend single messages based on errors in our responses.
-	     if the client system could not read errors with this detail I would simply respond to all issue with 
-	     
+	     if the client system could not read errors with this detail I would simply respond to all issue with :
 	     [{"ERROR":"One or more nodes had a missing ID, please resend batch"}]
-	      */
+	     it would be advantageous if the sender labeled there batches, we could be more specific with our resend batch requests 
+	    */
 
 	    return response;
 	}

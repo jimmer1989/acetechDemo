@@ -1,7 +1,6 @@
 # acetechDemo
 
 # this is a springboot project that can be built in maven.
-# run as a java application  
 # i have been doing this in eclipse 
 
 #use postman to PUT your message to URL 
@@ -11,7 +10,7 @@
 
 #here some suggestions
 
-#<!--this is a good message ************************************************************************************************************************--> 
+#<!--this is a successful/correct message***************************************************************************************************************--> 
 
 [{
 	"batchid": "PP25604",
@@ -37,6 +36,26 @@
 	"batchCount": 100
 }
 
+#<!--Fail, batch ID missing from one ************************************************************************************************************************-->
+[{
+	"batchid": "",
+	"batchTypeId": "medicine 01",
+	"batchTypeDescription": "Panadol",
+	"batchExpirationDate": "2024-02-22",
+	"batchCount": 55
+}, {
+	"batchid": "PP25604",
+	"batchTypeId": "medicine 01",
+	"batchTypeDescription": "Panadol",
+	"batchExpirationDate": "2024-02-22",
+	"batchCount": 55
+}, {
+	"batchid": "PP25605",
+	"batchTypeId": "medicine 03",
+	"batchTypeDescription": "Nurofen",
+	"batchExpirationDate": "2024-02-22",
+	"batchCount": 100
+}]
 #<!--Fail, duplicates ************************************************************************************************************************-->
 [{
 	"batchid": "PP25604",
@@ -94,4 +113,3 @@ fxgjzsrtazrtjzratj
 	}
 ]
 
-#<!--************************************************************************************************************************-->

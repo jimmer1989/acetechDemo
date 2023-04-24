@@ -12,9 +12,9 @@ import com.andy.acetech.batchConsumer.model.*;
 public class Controller {
 	
 	public static JsonArray jsonToBatchArray(String jsonString){
-		ArrayList<String> batchIDs=new ArrayList<String>();
-		
-		ArrayList<Batch> batchArray=new ArrayList<Batch>(); 
+		ArrayList<String> batchIDs=new ArrayList<String>();// list of ids to identify dupes
+		ArrayList<Batch> batchArray=new ArrayList<Batch>();// list of objects that will be created from json, have errors added to them, insert into db if acceptable, and used to generate response json
+
 		if(isValidJsonArray(jsonString)) { // validate JSON and make sure it is an array
 			JsonArray data = (JsonArray) JsonParser.parseString(jsonString);
 			for (JsonElement element : data) { // go through list of json objects, check for issues and add them to the array.
@@ -40,7 +40,7 @@ public class Controller {
 		    }
 		}
 		
-		JsonArray response = new JsonArray(); 
+		JsonArray response = new JsonArray(); // begin building a response
 		for(int i=0; i<batchArray.size(); i++) {
 			JsonObject entry = new JsonObject();
 			if(batchArray.get(i).isSuccessful()){
@@ -61,23 +61,19 @@ public class Controller {
 		
 		// OUT OF SCOPE FOR NOW - need to handle database issue though.
 		// what if they send a batchID we have not seen before ?
-		// what if they have a batchID / batchTypeDescription pair that is different from what we have ?
+		// what if they have a batchID / batchTypeDescription pair that is different from what we have ? 
 		// If i had the the date-time of message generation I would use update where batchID = batchID and current_timestamp< new_timestamp 
 		
 		// there could be issues inserting into database, and this method should be able to add errors to the object and return it to the sender much like what we have here.
 		// possible solution is to return Db busy please resend in 5 minutes
 		
-		// unknown batch ID, etc  
-		
 		// what if the database is simply non responsive?
 		// is it possible to send failures at a later time, asynchronously? 
-	
-		
 		// we can log and store messages once database recovers, but might have missed opportunity to send back unknown batch error.
 		// in these scenarios we can build a queue, and submit once db has recovered.
 		
-		// final thought, It is best to request resend in this case, unless the there is no timeout set, then we could leave sender hanging (until we have a final answer) if that is acceptable to them
-		// accuracy is important, commonly occurring database issues should be dealt with by bug fixing or scaling up resources (based on the situation)
+		// final thought, It is best to request resending in this case, unless the there is no timeout set, then we could leave sender hanging (until we have a final answer) if that is acceptable to them
+		// accuracy is most likely the highest importance, commonly occurring database issues should be dealt with by bug fixing or scaling up resources (based on the situation)
 		
 		return response;
 	}
