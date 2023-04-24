@@ -27,6 +27,9 @@ public class APIView {
 	     * if it's every few seconds or once a minute, is it really necessary to chase fails ?
 	     * I have seen well regarded and trusted systems that simply disregard the odd message failure, with the knowledge that another update will be along soon enough
 	     * solutions like this should have a last update field when displaying info to the user.
+	     * 
+	     * This may not be good enough when dealing with medicine and the lives depending on it.
+	     * 
 	     * for now I will assume every message is unmissable, and should be followed up */
 	    
 	    /* http status is always ok if we have read and respond */
@@ -38,8 +41,7 @@ public class APIView {
 	     
 	     [{"ERROR":"One or more nodes had a missing ID, please resend batch"}]
 	      */
-	    
-	    
+
 	    return response;
 	}
 }

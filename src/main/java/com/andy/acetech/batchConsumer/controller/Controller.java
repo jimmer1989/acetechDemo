@@ -3,6 +3,7 @@ package com.andy.acetech.batchConsumer.controller;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map.Entry;
 
 import com.google.gson.*;
@@ -12,6 +13,8 @@ import com.andy.acetech.batchConsumer.model.*;
 public class Controller {
 	
 	public static JsonArray jsonToBatchArray(String jsonString){
+		ArrayList<String> batchIDs=new ArrayList<String>();
+		
 		ArrayList<Batch> batchArray=new ArrayList<Batch>(); 
 		if(isValidJsonArray(jsonString)) { // validate JSON and make sure it is an array
 			JsonArray data = (JsonArray) JsonParser.parseString(jsonString);
@@ -20,6 +23,7 @@ public class Controller {
 			    Batch tempBatch=convertJsonToBatchObject(object);
 			    if(tempBatch != null) {
 			    	batchArray.add(convertJsonToBatchObject(object));
+			    	batchIDs.add(tempBatch.getBatchId());
 			    }else{
 			    	return getJsonStringBadIDResponse();
 			    }
@@ -27,15 +31,15 @@ public class Controller {
 		}else{
 			return getJsonStringMalformedOrEmptyResponse();
 		}
-		
-		
-		
-		// insert the batchArray successes into a database.
-		// OUT OF SCOPE FOR NOW - need to handle database issue though.
-		// what if they send a batchID we have not seen before ?
-		// what if they have a batchID / batchTypeDescription pair that is different from what we have ?
-		
-		
+				
+		ArrayList<String> duplicates = findDuplicates(batchIDs);// I assume duplicate batchIDs is an issue
+		for (int i = 0; i < duplicates.size(); i++) {
+		    for(int j = 0; j < batchArray.size(); j++){
+		    	if(batchArray.get(j).getBatchId().equals(duplicates.get(i) ) ) {
+		    		batchArray.get(j).addErrorList("batchId", "duplicates found, object is rejected");
+		    	}
+		    }
+		}
 		
 		JsonArray response = new JsonArray(); 
 		for(int i=0; i<batchArray.size(); i++) {
@@ -51,6 +55,30 @@ public class Controller {
 			}
 			response.add(entry);
 		}
+		
+		
+		// insert the batchArray successes into a database.
+		// for each object that returns true from .isSuccessful
+		
+		// OUT OF SCOPE FOR NOW - need to handle database issue though.
+		// what if they send a batchID we have not seen before ?
+		// what if they have a batchID / batchTypeDescription pair that is different from what we have ?
+		// If i had the the date-time of message generation I would use update where batchID = batchID and current_timestamp< new_timestamp 
+		
+		// there could be issues inserting into database, and this method should be able to add errors to the object and return it to the sender much like what we have here.
+		// possible solution is to return Db busy please resend in 5 minutes
+		
+		// unknown batch ID, etc  
+		
+		// what if the database is simply non responsive?
+		// is it possible to send failures at a later time, asynchronously? 
+		
+		// we can log and store messages once database recovers, but might have missed opportunity to send back unknown batch error.
+		// in these scenarios we can build a queue, and submit once db has recovered.
+		
+		// final thought, It is best to request resend in this case.
+		// accuracy is important, commonly occurring database issues should be dealt with by bug fixing or scaling up resources (based on the situation)
+		
 		return response;
 	}
 	
@@ -133,5 +161,16 @@ public class Controller {
 	    } catch (JsonSyntaxException e) { return false;
 	    }
 	    return true;
+	}
+	
+	public static ArrayList<String> findDuplicates(ArrayList<String> batchIDs) {
+	    ArrayList<String> duplicates = new ArrayList<String>();
+	    HashSet<String> set = new HashSet<String>();
+	    for (String id : batchIDs) {
+	        if (!set.add(id)) {
+	            duplicates.add(id);
+	        }
+	    }
+	    return duplicates;
 	}
 }

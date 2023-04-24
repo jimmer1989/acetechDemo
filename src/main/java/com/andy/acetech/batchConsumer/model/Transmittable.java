@@ -4,7 +4,6 @@ import java.util.HashMap;
 
 public class Transmittable {
 
-	private Boolean successful=true;
 	private HashMap<String,String> errorList=new HashMap<String,String>();
 	
 	public Transmittable()

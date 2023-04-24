@@ -65,7 +65,7 @@ public class Batch extends Transmittable
 		this.batchId = batchId;
 	}
 
-	public void setRecievedDate(LocalDate now) {
+	public void setRecievedDate(LocalDate now) {/* I would much prefer this field was generated date. the sender does not currently support that but it would be very useful*/
 		this.receivedDate = now;
 	}
 

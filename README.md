@@ -37,6 +37,25 @@
 }
 
 #<!--************************************************************************************************************************-->
+[{
+	"batchid": "PP25604",
+	"batchTypeId": "medicine 01",
+	"batchTypeDescription": "Panadol",
+	"batchExpirationDate": "2024-02-22",
+	"batchCount": 55
+}, {
+	"batchid": "PP25604",
+	"batchTypeId": "medicine 01",
+	"batchTypeDescription": "Panadol",
+	"batchExpirationDate": "2024-02-22",
+	"batchCount": 55
+}, {
+	"batchid": "PP25605",
+	"batchTypeId": "medicine 03",
+	"batchTypeDescription": "Nurofen",
+	"batchExpirationDate": "2024-02-22",
+	"batchCount": 100
+}]
 
 []
 
